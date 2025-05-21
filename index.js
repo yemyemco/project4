@@ -114,7 +114,6 @@ server.post("/addCourse", async (req, res)=>
         
         //Verify user's token
         let gotToken = req.header("Authorization");
-        console.log(gotToken);
         if(!gotToken)
         {
             return res.status(400).json({Message: "Error! Please log in first."});
