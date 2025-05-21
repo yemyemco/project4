@@ -111,40 +111,6 @@ server.post("/addCourse", async (req, res)=>
             return res.status(400).json({Message: "Error! All fields required"});
         }
         
-        
-        //Verify user's token
-        let gotToken = req.header("Authorization");
-        if(!gotToken)
-        {
-            return res.status(400).json({Message: "Error! Please log in first."});
-        }
-
-        gotToken = gotToken.split(" ");
-        gotToken = gotToken[1];
-        gotToken = jwt.verify(gotToken, process.env.ACCESS_TOKEN);
-
-        //Check for token
-        if(!gotToken)
-        {
-            return res.status(400).json({Message: "Error! Access denied"})
-        }
-
-        //Find user in database using the token
-        let userID = await userdb.findOne(gotToken.id);
-
-        if(!userID)
-        {
-            return res.status(404).json({Message: "Error! Account not found."});
-        }
-
-        //Check user's role
-        if(userID?.role != "instructor")
-        {
-            return res.status(403).json({Message: "Forbidden! Unauthorised operation"});
-        }
-        
-        res.status(200).json({Message: "Processing..."});
-
         //Check if course already exists
         const findCourse = await coursedb.findOne({code});
         if (findCourse)
